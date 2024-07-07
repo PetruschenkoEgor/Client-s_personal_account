@@ -3,9 +3,9 @@ import pytest
 
 @pytest.fixture
 def card_number():
-    return 'Maestro 1596837868705199'
+    return 7000792289606361
 
 
 @pytest.fixture
 def account_number():
-    return 'Счет 64686473678894779589'
+    return 73654108430135874305
