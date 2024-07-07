@@ -1,4 +1,7 @@
-def filter_by_state(list_dict, state="EXECUTED"):
+from typing import List
+
+
+def filter_by_state(list_dict: List, state: str = "EXECUTED") -> List:
     """Функция фильтрует список словарей по ключу state и возвращает новый список словарей"""
 
     # С помощью листа понимания создаем новый список
@@ -19,7 +22,7 @@ if __name__ == "__main__":
     )
 
 
-def sort_by_date(list_dict, sort_order=True):
+def sort_by_date(list_dict: List, sort_order: bool = True) -> List:
     """Функция сортирует список словарей по дате"""
     # Сортируем список словарей по ключу date
     sorted_list = sorted(list_dict, key=lambda x: x["date"], reverse=sort_order)
