@@ -23,7 +23,8 @@ def mask_account_card(number_card_or_account: str) -> str:
     return result
 
 
-print(mask_account_card("Счет 35383033474447895560"))
+if __name__ == "__main__":
+    print(mask_account_card("Счет 35383033474447895560"))
 
 
 def get_data(data_time: str) -> str:
@@ -40,4 +41,5 @@ def get_data(data_time: str) -> str:
     return data
 
 
-print(get_data("2018-07-11T02:26:18.671407"))
+if __name__ == "__main__":
+    print(get_data("2018-07-11T02:26:18.671407"))
