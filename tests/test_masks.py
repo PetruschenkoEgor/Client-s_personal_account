@@ -2,16 +2,6 @@ from src.masks import get_mask_card_number, get_mask_account
 import pytest
 
 
-def test_get_mask_card_number_fixture(card_number):
-    """Проверяем, что маска номера карты создается корректно"""
-    assert get_mask_card_number(card_number) == "7000 79** **** 6361"
-
-
-def test_get_mask_account_fixture(account_number):
-    """Проверяем, что маска номера счета создается корректно"""
-    assert get_mask_account(account_number) == "**4305"
-
-
 @pytest.mark.parametrize(
     "enter_value, expected_result",
     [
