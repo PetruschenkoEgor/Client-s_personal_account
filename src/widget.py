@@ -1,4 +1,4 @@
-from src.masks import get_mask_card_number, get_mask_account
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(number_card_or_account: str) -> str:
@@ -39,7 +39,8 @@ def get_date(data_time: str) -> str:
     date.append(data_time[:4])
 
     # Проверяем нужный формат у даты
-    if "".join(date).isdigit() and 1 <= int(data_time[8:10]) <= 31 and 1 <= int(data_time[5:7]) <= 12 and 1980 <= int(data_time[:4]) <= 2024:
+    if ("".join(date).isdigit() and 1 <= int(data_time[8:10]) <= 31 and 1 <= int(data_time[5:7]) <= 12
+            and 1980 <= int(data_time[:4]) <= 2024):
         # Переделываем список с датой в нужный нам формат
         result = ".".join(date)
     else:
