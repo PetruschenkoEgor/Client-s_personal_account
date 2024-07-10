@@ -2,8 +2,6 @@ import pytest
 
 from src.processing import filter_by_state, sort_by_date
 
-# from tests.conftest import state_enter_value_1, state_expected_result_1, state_enter_value_2, state_expected_result_2
-
 
 @pytest.mark.parametrize(
     "enter_value, expected_result",
@@ -29,10 +27,6 @@ from src.processing import filter_by_state, sort_by_date
         ),
     ],
 )
-#@pytest.mark.parametrize(
-    #"enter_value, expected_result",
-    #[(state_enter_value_1, state_expected_result_1), (state_enter_value_2, state_expected_result_2)],
-#)
 def test_filter_by_state(enter_value, expected_result):
     """Тест фильтрации по ключу state и если он отсутствует"""
     assert filter_by_state(enter_value) == expected_result
