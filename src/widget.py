@@ -1,4 +1,4 @@
-import masks
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(number_card_or_account: str) -> str:
@@ -13,20 +13,24 @@ def mask_account_card(number_card_or_account: str) -> str:
             letter_lst.append(i)
 
     # Используется эта маска, если принимаемый аргумент - счет
-    if "Счет" in number_card_or_account:
-        result = "Счет" + " " + masks.get_mask_account(int("".join(number_lst)))
+    if len(number_lst) == 20:
+        result = "".join(letter_lst) + get_mask_account(int("".join(number_lst)))
 
     # Используется эта маска, если принимаемый аргумент не счет
+    elif len(number_lst) == 16:
+        result = "".join(letter_lst) + get_mask_card_number(int("".join(number_lst)))
+
     else:
-        result = "".join(letter_lst) + " " + masks.get_mask_card_number(int("".join(number_lst)))
+        result = "Введены некорректные данные!"
 
     return result
 
 
-print(mask_account_card("Счет 35383033474447895560"))
+if __name__ == "__main__":
+    print(mask_account_card("Maestro 1596837868705199"))
 
 
-def get_data(data_time: str) -> str:
+def get_date(data_time: str) -> str:
     """Функция возвращает дату"""
     # Добавляем нужную нам дату в список с помощью срезов
     date = []
@@ -34,10 +38,20 @@ def get_data(data_time: str) -> str:
     date.append(data_time[5:7])
     date.append(data_time[:4])
 
-    # Переделываем список с датов в нужный нам формат
-    data = ".".join(date)
+    # Проверяем нужный формат у даты
+    if (
+        "".join(date).isdigit()
+        and 1 <= int(data_time[8:10]) <= 31
+        and 1 <= int(data_time[5:7]) <= 12
+        and 1980 <= int(data_time[:4]) <= 2024
+    ):
+        # Переделываем список с датой в нужный нам формат
+        result = ".".join(date)
+    else:
+        result = "Некорректная дата!"
 
-    return data
+    return result
 
 
-print(get_data("2018-07-11T02:26:18.671407"))
+if __name__ == "__main__":
+    print(get_date("2025-03-11T02:26:18.671407"))
