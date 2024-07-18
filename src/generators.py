@@ -141,5 +141,5 @@ def card_number_generator(start, stop):
         yield "Номер карты может быть в диапазоне от 1 до 9999999999999999!"
 
 
-for card_number in card_number_generator(2, 10000000000000000):
+for card_number in card_number_generator(1, 5):
     print(card_number)
