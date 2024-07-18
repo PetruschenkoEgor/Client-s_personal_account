@@ -100,3 +100,25 @@ def filter_by_currency(transactions, currency):
 usd_transactions = filter_by_currency(transactions, "USD")
 for _ in range(3):
     print(next(usd_transactions))
+
+
+def transaction_descriptions(transactions):
+    """ Принимает на вход список словарей(транзакций) и возвращает описание каждой операции по очереди """
+    # Если на вход поступил пустой список
+    if transactions == []:
+        # Обработка исключения StopIteration
+        while True:
+            yield "Пустой список! Введите данные!"
+    # Если на вход поступил не пустой список
+    else:
+        # Вывод назначения транзакций
+        for y in list(x["description"] for x in transactions):
+            yield y
+        # Обработка исключения StopIteration
+        while True:
+            yield "Транзакции закончились!"
+
+
+descriptions = transaction_descriptions(transactions)
+for _ in range(5):
+    print(next(descriptions))
