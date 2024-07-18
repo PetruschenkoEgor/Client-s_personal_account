@@ -122,3 +122,24 @@ def transaction_descriptions(transactions):
 descriptions = transaction_descriptions(transactions)
 for _ in range(5):
     print(next(descriptions))
+
+
+def card_number_generator(start, stop):
+    """ Генерирует номера карт, принимает на вход начальное и конечное значения, выдает номер карты
+     в формате ХХХХ ХХХХ ХХХХ ХХХХ """
+    # Создаем пустой номер
+    new_str = "0000000000000000"
+    # Если значения находятся в нужном диапазоне
+    if 1 <= start <= 9999999999999999 and 1 <= stop <= 9999999999999999:
+        for i in range(start, stop+1):
+            # Через range добавляем к пустому номеру цифры из заданного диапазона и подгоняем под размер номера 16 цифр
+            number_str = (new_str + str(i))[-16:]
+            # Выводим номер с разбивкой по 4 цифры
+            yield " ".join([(number_str[i: i + 4]) for i in range(0, len(number_str), 4)])
+    # Если значения выходят за нужный диапазон
+    else:
+        yield "Номер карты может быть в диапазоне от 1 до 9999999999999999!"
+
+
+for card_number in card_number_generator(2, 10000000000000000):
+    print(card_number)
