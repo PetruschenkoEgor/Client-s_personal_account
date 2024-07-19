@@ -20,11 +20,6 @@ mypy = "^1.10.1"
 pytest = "^8.2.2"
 
 
-[tool.mypy]
-exclude = 'venv'
-pytest-cov = "^5.0.0"
-
-
 [tool.black]
 line-length = 119
 exclude = '''
