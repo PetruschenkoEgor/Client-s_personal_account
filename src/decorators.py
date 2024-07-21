@@ -3,12 +3,13 @@ from inspect import getcallargs
 
 
 def log(filename=""):
-    """ Логгирует данные о функции """
+    """Логгирует данные о функции"""
+
     def wrapper(function):
         @wraps(function)
         def inner(*args, **kwargs):
             try:
-                result = function(*args, **kwargs)
+                function(*args, **kwargs)
                 # Выдает результат в консоль, если имя файла не задано
                 if filename == "":
                     print(f"{function.__name__} ok")
@@ -39,6 +40,7 @@ def log(filename=""):
                         f.write(f"{function.__name__} error: {e}. Inputs: {getcallargs(function, *args, **kwargs)}")
 
         return inner
+
     return wrapper
 
 
@@ -48,6 +50,7 @@ def my_function(x, y):
 
 
 my_function(1, 2)
+
 
 @log()
 def my_function_division(x, y):
