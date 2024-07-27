@@ -7,7 +7,7 @@ import requests
 
 @patch('src.external_api.requests.get')
 def test_get_amount_in_rub(mock_get):
-    """ Тест, транзакции с валютой рубль """
+    """ Тест, транзакции с валютой USD """
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {'success': True, 'query': {'from': 'USD', 'to': 'RUB', 'amount': 8221.37}, 'info': {'timestamp': 1722098644, 'rate': 85.972867}, 'date': '2024-07-27', 'result': 706814.749568}
     usd_transaction = [{
