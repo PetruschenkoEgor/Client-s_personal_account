@@ -26,5 +26,5 @@ def test_get_amount_in_rub(mock_get):
     "to": "Счет 35383033474447895560"
   }]
     result = get_amount_in_rub(usd_transaction)
-    assert result == "Сумма транзакции: 31957.58."
+    assert result == "Сумма транзакции: 706814.75."
     mock_get.assert_called_once_with(usd_transaction)

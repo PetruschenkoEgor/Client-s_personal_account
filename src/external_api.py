@@ -32,7 +32,6 @@ def get_amount_in_rub(transaction):
             # Запрос курса валют по API
             response = requests.get(url, headers=headers, params=params)
             status_code = response.status_code
-            return response.json()
 
             # Проверяем, успешный ли запрос
             if status_code == 200:
