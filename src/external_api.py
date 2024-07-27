@@ -31,9 +31,11 @@ def get_amount_in_rub(transaction):
 
             # Запрос курса валют по API
             response = requests.get(url, headers=headers, params=params)
+            status_code = response.status_code
+            return response.json()
 
             # Проверяем, успешный ли запрос
-            if response.status_code == 200:
+            if status_code == 200:
                 # Получение общей суммы и округление до 2-х цифр после запятой
                 response_amount = round(response.json().get('result'), 2)
                 return f"Сумма транзакции: {response_amount}."
@@ -44,7 +46,8 @@ def get_amount_in_rub(transaction):
 
         # Если валюта RUB, то выводим сумму транзакции
         else:
-            return f"Сумма транзакции: {transaction[0]["operationAmount"]["amount"]}."
+            transaction_ = transaction[0]["operationAmount"]["amount"]
+            return f"Сумма транзакции: {transaction_}."
 
     except requests.exceptions.RequestException as e:
         return e
