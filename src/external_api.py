@@ -1,11 +1,11 @@
 import os
-from dotenv import load_dotenv
-import json
+
 import requests
+from dotenv import load_dotenv
 
 
 def get_amount_in_rub(transaction):
-    """ Функция принимает транзакцию и возвращает сумму транзакций в рублях """
+    """Функция принимает транзакцию и возвращает сумму транзакций в рублях"""
     # Загрузка переменных из файла .env
     load_dotenv()
 
@@ -19,15 +19,9 @@ def get_amount_in_rub(transaction):
             to_currency = "RUB"
             from_currency = currency
             amount = transaction[0]["operationAmount"]["amount"]
-            url = f"https://api.apilayer.com/exchangerates_data/convert"
-            params = {
-                "amount": amount,
-                "from": from_currency,
-                "to": to_currency
-            }
-            headers = {
-                "apikey": api_key
-            }
+            url = "https://api.apilayer.com/exchangerates_data/convert"
+            params = {"amount": amount, "from": from_currency, "to": to_currency}
+            headers = {"apikey": api_key}
 
             # Запрос курса валют по API
             response = requests.get(url, headers=headers, params=params)
@@ -36,7 +30,7 @@ def get_amount_in_rub(transaction):
             # Проверяем, успешный ли запрос
             if status_code == 200:
                 # Получение общей суммы и округление до 2-х цифр после запятой
-                response_amount = round(response.json().get('result'), 2)
+                response_amount = round(response.json().get("result"), 2)
                 return f"Сумма транзакции: {response_amount}."
 
             # Если запрос неуспешный, выводим статус-код и причину
@@ -53,18 +47,18 @@ def get_amount_in_rub(transaction):
 
 
 if __name__ == "__main__":
-    print(get_amount_in_rub([{
-    "id": 41428829,
-    "state": "EXECUTED",
-    "date": "2019-07-03T18:35:29.512364",
-    "operationAmount": {
-      "amount": "8221.37",
-      "currency": {
-        "name": "USD",
-        "code": "USD"
-      }
-    },
-    "description": "Перевод организации",
-    "from": "MasterCard 7158300734726758",
-    "to": "Счет 35383033474447895560"
-  }]))
+    print(
+        get_amount_in_rub(
+            [
+                {
+                    "id": 41428829,
+                    "state": "EXECUTED",
+                    "date": "2019-07-03T18:35:29.512364",
+                    "operationAmount": {"amount": "8221.37", "currency": {"name": "USD", "code": "USD"}},
+                    "description": "Перевод организации",
+                    "from": "MasterCard 7158300734726758",
+                    "to": "Счет 35383033474447895560",
+                }
+            ]
+        )
+    )
