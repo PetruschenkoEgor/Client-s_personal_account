@@ -1,7 +1,6 @@
 import logging
 from typing import Union
 
-
 logger = logging.getLogger("masks")
 logger.setLevel(logging.INFO)
 file_handler = logging.FileHandler("logs/masks.log", "w")
