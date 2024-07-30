@@ -1,4 +1,4 @@
-from src.decorators import my_function, log
+from src.decorators import log, my_function
 
 
 def test_log_ok(capsys):
