@@ -1,4 +1,13 @@
+import logging
 from typing import Union
+
+
+logger = logging.getLogger("masks")
+logger.setLevel(logging.INFO)
+file_handler = logging.FileHandler("logs/masks.log", "w")
+file_formatter = logging.Formatter("%(asctime)s - %(filename)s - %(levelname)s: %(message)s")
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
 
 
 def get_mask_card_number(number_card: Union[int, str]) -> str:
@@ -8,8 +17,10 @@ def get_mask_card_number(number_card: Union[int, str]) -> str:
 
     # Проверяем корректность введенного номера карты
     if len(number_card_str) != 16 or not number_card_str.isdigit():
+        logger.error("Введен некорректный номер карты")
         result = "Некорректный номер карты!"
     else:
+        logger.info("Создание маски номера карты")
         # Делаем маску номера, заменяем часть строки подстрокой
         card_mask = number_card_str.replace(number_card_str[6:12], "******")
 
@@ -31,8 +42,10 @@ def get_mask_account(account_number: int) -> str:
 
     # Проверяем корректность введенного номера счета
     if len(account_number_str) != 20 or not account_number_str.isdigit():
+        logger.error("Введен некорректный номер счета")
         result = "Некорректный номер счета!"
     else:
+        logger.info("Создание маски номера счета")
         # Делаем маску счета, заменяем часть строки подстрокой
         account_mask_slice = account_number_str[-5:]
         result = account_mask_slice.replace(account_mask_slice[0:1], "**")
