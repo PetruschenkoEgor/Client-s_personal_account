@@ -2,9 +2,12 @@ import json
 import logging
 import os
 
+
+PATH_TO_FILE_FILE_HANDLER = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs", "utils.log")
+
 logger = logging.getLogger("utils")
 logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler("logs/utils.log", "w")
+file_handler = logging.FileHandler(PATH_TO_FILE_FILE_HANDLER, "w")
 file_formatter = logging.Formatter("%(asctime)s - %(filename)s - %(levelname)s: %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
@@ -14,7 +17,7 @@ logger.addHandler(file_handler)
 PATH_TO_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
 
 
-def get_transactions_from_json(PATH_TO_FILE):
+def get_transactions_from_json(path_to_file):
     """Функция принимает путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях"""
     try:
         logger.info(f"Записываем данные в файл {PATH_TO_FILE}")
