@@ -11,7 +11,7 @@ def filter_by_state(list_dict: List, state: str = "EXECUTED") -> Union[List, str
     # return [i for i in list_dict if i["state"] == state]
     result = []
     for i in list_dict:
-        if state == i["state"]:
+        if state == i.get("state"):
             result.append(i)
 
     if result == []:
@@ -19,7 +19,7 @@ def filter_by_state(list_dict: List, state: str = "EXECUTED") -> Union[List, str
 
     return result
 
-#
+
 # if __name__ == "__main__":
 #     print(
 #         filter_by_state(
@@ -37,18 +37,17 @@ def sort_by_date(list_dict: List, sort_order: bool = True) -> Union[List, str]:
     """Функция сортирует список словарей по дате"""
     try:
         for i in list_dict:
-            data = i["date"]
+            data = i.get("date")
             if int(data[:4]) and int(data[5:7]) and int(data[8:10]):
                 # Сортируем список словарей по ключу date
-                result = sorted(list_dict, key=lambda x: x["date"], reverse=sort_order)
+                result = sorted(list_dict, key=lambda x: x.get("date"), reverse=sort_order)
 
     except ValueError:
         # При неправильной дате выводится сообщение
         return "Некорректная дата!"
-
     return result
 
-#
+
 # if __name__ == "__main__":
 #     print(
 #         sort_by_date(
@@ -62,81 +61,82 @@ def sort_by_date(list_dict: List, sort_order: bool = True) -> Union[List, str]:
 #     )
 
 
-# def search_in_operations(list_operations: list[dict], search_str: str) -> list[dict]:
-#     """ Принимает список словарей с банковскими операциями и строку поиска, возращает список словарей, в которых есть данная строка """
-#     list_search_str = search_str.split()
-#
-#     pattern = re.compile(fr'\w+\s{list_search_str[1]}\s{list_search_str[2]}\s\w+\s{list_search_str[4]}')
-#
-#     # С помощью re выбираем из списка нужные банковские операции
-#     list_search_operations = [operation for operation in list_operations if pattern.search(operation.get('description'))]
-#
-#     return list_search_operations
-#
-#
-#
-# if __name__ == '__main__':
-#     print(search_in_operations([
-#   {
-#     "id": 441945886,
-#     "state": "EXECUTED",
-#     "date": "2019-08-26T10:50:58.294041",
-#     "operationAmount": {
-#       "amount": "31957.58",
-#       "currency": {
-#         "name": "руб.",
-#         "code": "RUB"
-#       }
-#     },
-#     "description": "Перевод организации",
-#     "from": "Maestro 1596837868705199",
-#     "to": "Счет 64686473678894779589"
-#   },
-#         {
-#             "id": 41428829,
-#             "state": "EXECUTED",
-#             "date": "2019-07-03T18:35:29.512364",
-#             "operationAmount": {
-#                 "amount": "8221.37",
-#                 "currency": {
-#                     "name": "USD",
-#                     "code": "USD"
-#                 }
-#             },
-#             "description": "Перевод организации",
-#             "from": "MasterCard 7158300734726758",
-#             "to": "Счет 35383033474447895560"
-#         },
-#         {
-#             "id": 587085106,
-#             "state": "EXECUTED",
-#             "date": "2018-03-23T10:45:06.972075",
-#             "operationAmount": {
-#                 "amount": "48223.05",
-#                 "currency": {
-#                     "name": "руб.",
-#                     "code": "RUB"
-#                 }
-#             },
-#             "description": "Открытие вклада",
-#             "to": "Счет 41421565395219882431"
-#         },
-#         {
-#             "id": 743278119,
-#             "state": "EXECUTED",
-#             "date": "2018-10-15T08:05:34.061711",
-#             "operationAmount": {
-#                 "amount": "51203.12",
-#                 "currency": {
-#                     "name": "USD",
-#                     "code": "USD"
-#                 }
-#             },
-#             "description": "Перевод с карты на карту",
-#             "from": "MasterCard 1435442169918409",
-#             "to": "Maestro 7452400219469235"
-#         }
-#     ], "Перевод"))
+def search_in_operations(list_operations: list[dict], search_str: str) -> list[dict]:
+    """ Принимает список словарей с банковскими операциями и строку поиска, возращает список словарей, в которых есть данная строка """
+    if search_str == "" or search_str == " ":
+        result = []
+    else:
+        pattern = re.compile(fr'{search_str}')
+
+        # С помощью re выбираем из списка нужные банковские операции
+        result = [operation for operation in list_operations if pattern.search(operation.get('description'))]
+
+    return result
+
+
+
+if __name__ == '__main__':
+    print(search_in_operations([
+  {
+    "id": 441945886,
+    "state": "EXECUTED",
+    "date": "2019-08-26T10:50:58.294041",
+    "operationAmount": {
+      "amount": "31957.58",
+      "currency": {
+        "name": "руб.",
+        "code": "RUB"
+      }
+    },
+    "description": "Перевод организации",
+    "from": "Maestro 1596837868705199",
+    "to": "Счет 64686473678894779589"
+  },
+        {
+            "id": 41428829,
+            "state": "EXECUTED",
+            "date": "2019-07-03T18:35:29.512364",
+            "operationAmount": {
+                "amount": "8221.37",
+                "currency": {
+                    "name": "USD",
+                    "code": "USD"
+                }
+            },
+            "description": "Перевод организации",
+            "from": "MasterCard 7158300734726758",
+            "to": "Счет 35383033474447895560"
+        },
+        {
+            "id": 587085106,
+            "state": "EXECUTED",
+            "date": "2018-03-23T10:45:06.972075",
+            "operationAmount": {
+                "amount": "48223.05",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            },
+            "description": "Открытие вклада",
+            "to": "Счет 41421565395219882431"
+        },
+        {
+            "id": 743278119,
+            "state": "EXECUTED",
+            "date": "2018-10-15T08:05:34.061711",
+            "operationAmount": {
+                "amount": "51203.12",
+                "currency": {
+                    "name": "USD",
+                    "code": "USD"
+                }
+            },
+            "description": "Перевод с карты на карту",
+            "from": "MasterCard 1435442169918409",
+            "to": "Maestro 7452400219469235"
+        }
+    ], "Открытие вклада"))
 
 def get_operations_info(list_operations: list[dict], list_categories: list) -> dict:
     """ Принимает список словарей с банковскими операциями и список категорий операций, возвращает словарь {категория: кол-во операций} """
