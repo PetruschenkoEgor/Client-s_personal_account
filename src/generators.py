@@ -54,15 +54,17 @@ def filter_by_currency(transactions, currency):
     if transactions == []:
         # Обработка исключения StopIteration
         while True:
-            yield "Пустой список! Введите данные!"
+            yield ["Пустой список! Введите данные!"]
     # Если на вход поступил не пустой список
     else:
         # Фильтрация списка словарей по наименованию валюты
         for x in list(filter(lambda x: x["operationAmount"]["currency"]["code"] == currency, transactions)):
+        # for x in list(filter(lambda x: x.get("operationAmount"["currency"]["code"]) == currency, transactions)):
+
             yield x
         # Обработка исключения StopIteration
         while True:
-            yield "Транзакции с указанной валютой отсутствуют!"
+            yield ["Транзакции с указанной валютой отсутствуют!"]
 
 
 usd_transactions = filter_by_currency(transactions, "USD")
