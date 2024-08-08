@@ -1,17 +1,25 @@
 from src.utils import get_transactions_from_json, PATH_TO_FILE
-from src.open_csv_and_excel import get_transactions_from_csv, get_transactions_from_excel, PATH_TO_FILE_CSV, PATH_TO_FILE_EXCEL
-from src.processing import filter_by_state, sort_by_date
+from src.open_csv_and_excel import (
+    get_transactions_from_csv,
+    get_transactions_from_excel,
+    PATH_TO_FILE_CSV,
+    PATH_TO_FILE_EXCEL,
+)
+from src.processing import filter_by_state, sort_by_date, search_in_operations
 from src.generators import filter_by_currency
+from src.widget import get_date, mask_account_card
 
 
 def main():
-    """ Главная функция """
+    """Главная функция"""
     # Приветствие и предложение выбрать пункт из меню(из какого файла получить информацию)
-    print("""Привет! Добро пожаловать в программу работы с банковскими транзакциями.
+    print(
+        """Привет! Добро пожаловать в программу работы с банковскими транзакциями.
     Выберите необходимый пункт меню:
     1. Получить информацию о транзакциях из JSON-файла
     2. Получить информацию о транзакциях из CSV-файла
-    3. Получить информацию о транзакциях из XLSX-файла""")
+    3. Получить информацию о транзакциях из XLSX-файла"""
+    )
 
     # Ввод пользователем данных
     input_type_file = input("Введите число от 1 до 3: ")
@@ -38,8 +46,10 @@ def main():
             input_type_file = input("Введите число от 1 до 3: ")
 
     # Предложение выполнить фильтрацию по статусу
-    print("""Введите статус, по которому необходимо выполнить фильтрацию.
-    Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING""")
+    print(
+        """Введите статус, по которому необходимо выполнить фильтрацию.
+    Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING"""
+    )
 
     # Ввод статуса
     input_state = input("Введите статус для фильтровки: ").upper()
@@ -57,8 +67,10 @@ def main():
             break
         else:
             print(f"Статус операции '{input_state}' недоступен.")
-            print("""Введите статус, по которому необходимо выполнить фильтрацию.
-                Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING""")
+            print(
+                """Введите статус, по которому необходимо выполнить фильтрацию.
+                Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING"""
+            )
             input_state = input("Введите статус для фильтровки: ").lower()
     # Функция фильтрации по ключу state
     filtering_by_state = filter_by_state(data, input_state)
@@ -75,12 +87,12 @@ def main():
                 if input_date_flag == "по возрастанию":
                     date_flag = False
                     # Функция сортировки даты
-                    # sort_date = sort_by_date(data, date_flag)
+                    sort_date = sort_by_date(filtering_by_state, date_flag)
                     break
                 elif input_date_flag == "по убыванию":
                     date_flag = True
                     # Функция сортировки даты
-                    # sort_date = sort_by_date(data, date_flag)
+                    sort_date = sort_by_date(filtering_by_state, date_flag)
                     break
                 else:
                     print("Введите по возрастанию или по убыванию!")
@@ -88,6 +100,7 @@ def main():
                     input_date_flag = input("Введите по возрастанию/по убыванию: ").lower()
             break
         elif input_date_sort == "нет":
+            sort_date = filtering_by_state
             break
         else:
             print("Введите Да или Нет!")
@@ -102,9 +115,10 @@ def main():
         if input_currency == "да":
             currency = "RUB"
             # Транзаакции по заданной валюте
-            # transactions_rub = filter_by_currency(transactions, currency)
+            transactions = filter_by_currency(sort_date, currency)
             break
         elif input_currency == "нет":
+            transactions = sort_date
             break
         else:
             print("Введите Да или Нет!")
@@ -117,9 +131,12 @@ def main():
 
     while True:
         if input_word == "да":
-
+            word = input("Введите слово: ")
+            # Фильтрация по слову
+            search_operations = search_in_operations(transactions, word)
             break
         elif input_word == "нет":
+            search_operations = transactions
             break
         else:
             print("Введите Да или Нет!")
@@ -128,10 +145,31 @@ def main():
 
     print("Распечатываю итоговый список транзакций...")
 
-    return filtering_by_state
+    lst_search_operations = []
+    for operation in search_operations:
+        lst_search_operations.append(operation)
+
+    if len(lst_search_operations) == 0:
+        print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+    if True:
+        # Количество операций
+        count_operation = len(lst_search_operations)
+        print(f"Всего банковских операций в выборке: {count_operation}")
+        for trans in search_operations:
+            trans_date = get_date(trans["date"])
+            currency = trans["operationAmount"]["currency"]["name"]
+            if trans["description"] == "Открытие вклада":
+                accaunt_card = mask_account_card(trans["to"])
+            else:
+                accaunt_card = mask_account_card(trans["from"]) + "->" + mask_account_card(trans["to"])
+
+            amount = trans["operationAmount"]["amount"]
+            print(
+                f"""{trans_date} {trans["description"]}
+{accaunt_card}
+Сумма: {round(float(amount))} {currency}"""
+            )
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
